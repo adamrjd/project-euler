@@ -1,6 +1,3 @@
-import math
-
-
 class gregorian(object):
     calendar = list()
     gregorian = dict()
@@ -34,10 +31,11 @@ class arithmetic(object):
         return [i for i in a.keys() if a[i]]
 
     def prime_factors_and_multiplicities(n):
+        from math import ceil
         sieve = arithmetic(1000 * (n % 1000 + 1)).sieve
         pfactors_mults = dict()
         for prime in sieve:
-            if prime <= math.ceil(n / 2):
+            if prime <= ceil(n / 2):
                 if n % prime == 0:
                     i = 1
                     mult = prime
@@ -69,9 +67,10 @@ class arithmetic(object):
         return list(sorted(divisors))
 
     def prime_proper_divisors(sieve, n):
+        from math import ceil
         l = set()
         for prime in sieve:
-            if prime <= math.ceil(n / 2):
+            if prime <= ceil(n / 2):
                 if n % prime == 0:
                     i = 1
                     mult = prime
@@ -201,14 +200,11 @@ class euler(object):
         return diagonal_sum
 
     @staticmethod
-    def dp_change(m, d):
-        from sys import maxsize
-        mnc = [1 if i in d else 0 for i in range(0, m + 1)]
-        for i in range(1, m + 1):
-            if i not in d:
-                mnc[i] = min(
-                    [mnc[i - c] + 1 if (i - c) > 0 else maxsize for c in d])
-        return mnc
+    def coin_sums(denominations=[1, 2, 5, 10, 20, 50, 100, 200], money=200, i=0):
+        if len(denominations) > 1:
+            return coin_sums(denominations[1:], money, i)
+        else:
+            return money // denominations[0]
 
     @staticmethod
     def largest_pandigital_prime():
@@ -246,23 +242,8 @@ class scientific(object):
         pass
 
 if __name__ == "__main__":
-    # maximum number of ways to make GBP$200p
-    '''monies = [1, 2, 5, 10, 20, 50, 100, 200]
-    num_count = 0
-    ways = {i: val for i, val in enumerate(euler.dp_change(200, monies))}
-    for i in reversed(range(1, 201)):
-        num_count += ways[i] + ways[200 - i]
-    print(num_count)'''
-    # sum of all pandigital numbers of 10 digits if sets of 3 after 1st dig
-    # are `mod` == 0 with primesTo 17
-    '''pandigitals = euler.pandigital_numbers(10)
-    pan_sum = 0
-    while True:
-        try:
-            curr_pan = pandigitals.__next__()
-
-        except StopIteration:
-            break'''
+    print(euler.dp_change(200, [1, 2, 5, 10, 20, 50, 100]))
+    print('hello world')
     # consecutive numbers that have 4 unique prime factors
     '''
     from sys import maxsize
@@ -276,19 +257,3 @@ if __name__ == "__main__":
             if all([len(lst) == c for lst in l]):
                 print(i)
                 break'''
-    # codility time complexity
-    '''def tape_equilibrium(A):
-        n = len(A)
-        i = 0
-        for num in P:
-            print(num)
-        return min(P)
-    print(tape_equilibrium([3, 1, 2, 4, 3]))'''
-    from math import factorial
-    from fractions import Fraction
-
-    a = Fraction(1 / factorial(200))
-    b = sum([factorial(i) for i in range(1, 201)])
-    c = Fraction(sum([factorial(i) for i in range(1, 201)]), factorial(200))
-
-    print(float(c))
